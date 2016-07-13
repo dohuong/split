@@ -9,6 +9,7 @@ autopublish
 insecure
 session
 blaze-html-templates
-standard-minifiers
 mongo
 random
+standard-minifier-css
+standard-minifier-js
