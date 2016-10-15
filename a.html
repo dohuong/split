@@ -7,7 +7,7 @@
 <body>
   <div class="outer">
     <!-- <div class="logo"></div> -->
-    <h1 class="title">Order</h1>
+    <h1 class="title">Orders</h1>
     <div class="subtitle">Split</div>
     {{> split}}
   </div>
@@ -15,8 +15,8 @@
 
 <template name="split">
   <ol class="split">
-    {{#each orders}}
-      {{> order}}
+    {{#each OrderDetails}}
+      {{> OrderDetail}}
     {{/each}}
   </ol>
 
@@ -26,9 +26,15 @@
       <button class="share">Share</button>
     </div>
     {{#if getUsers}}
-      <div class="details">
-        <div class="name">{{getUsers}}</div>
-      </div>
+      {{#each getUsers}}
+        {{> Customers}}
+      {{/each}}
+      
+<!--       <div class="details">
+        <div class="name">a
+          {{> Customers}}
+        </div>
+      </div> -->
     {{else}}
     <div class="message">No other users</div>
     {{/if}}
@@ -44,11 +50,18 @@
 
 </template>
 
-<template name="order">
+<template name="OrderDetail">
   <li class="order {{selected}}">
     <span class="name">{{product_name}}</span>
-    <span class="position">{{quantity}}</span>
     <span class="position">S${{price}}</span>
   </li>
+</template>
+
+<template name="Customers">
+  <li class="order">
+<!--     <span class="name">{{user_id}}</span>
+ -->    <span class="name">{{name}}</span>
+<!--     <span class="position">{{name}}</span>
+ -->  </li>
 </template>
 
