@@ -14,6 +14,7 @@
 </body>
 
 <template name="split">
+  Current User: {{AppUser}}
   <ol class="split">
     {{#each OrderDetails}}
       {{> OrderDetail}}
@@ -42,6 +43,10 @@
     <div class="message">Select item to split</div>
   {{/if}}
 
+  <div class="details">
+    <button class="share">Done, Go to Payment</button>
+  </div>
+
  <!--  <div class="outer">
     <div class="details">
       <button class="reset">Reset</button>
@@ -59,9 +64,18 @@
 
 <template name="Customers">
   <li class="order">
-<!--     <span class="name">{{user_id}}</span>
- -->    <span class="name">{{name}}</span>
-<!--     <span class="position">{{name}}</span>
+<!--      <input type="checkbox">
+ --><!--     <span class="name">{{user_id}}</span>
+ -->    <span class="name">{{name}} {{status user_id}}</span>
+<!--         <span class="position">{{current_orders}}</span>
  -->  </li>
+</template>
+
+
+<template name="payment">
+  <li class="order {{selected}}">
+    <span class="name">{{product_name}}</span>
+    <span class="position">S${{price}}</span>
+  </li>
 </template>
 
