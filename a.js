@@ -115,24 +115,64 @@ if (Meteor.isClient) {
         OrderDetails.update({_id:updated_order}, {$addToSet: {share: selectedSharer}});
         console.log("Share")}
       }
-    //   var isSharer = User.findOne({_id:selectedSharer});
-    //   console.log("chosen" + isSharer.chosen)
-
-    //   if(isSharer.chosen == true){
-    //     User.update({ _id: selectedSharer }, {$set: { chosen: false }});
-    //     User.update(selectedSharer, {$pull: { current_orders: order }});
-    //     OrderDetails.update({_id:updated_order}, {$pull: {share: selectedSharer}});
-    //     console.log("Unshare");
-    // } else {
-    //     User.update({ _id: selectedSharer }, {$set: { chosen: true }});
-    //     User.update({ _id: selectedSharer }, {$addToSet: { current_orders: order }});
-    //     OrderDetails.update({_id:updated_order}, {$addToSet: {share: selectedSharer}});
-    //     console.log("Share");
-    // }
-
     }
   );
+
+  Template.bill.helpers({
+    getBill: function() {
+      var current_users = Session.get("user_id");
+      var current_orders = User.findOne(current_users).current_orders
+      var current_credits = +(User.findOne(current_users).credits).toFixed(2);
+      Session.set("currentCredits",current_credits);
+      var list = []
+      var total = 0;
+      for (i=0;i<current_orders.length;i++) {
+        var dishName = OrderDetails.findOne(current_orders[i]).product_name;
+        console.log("dishName" + dishName);
+        var dishPrice = OrderDetails.findOne(current_orders[i]).price;
+        console.log("dishPrice" + dishPrice);
+        var dishShare = OrderDetails.findOne(current_orders[i]).share.length;
+        console.log("dishShare" + dishShare);
+        var finalPrice = +(dishPrice/dishShare).toFixed(2)
+        console.log("finalPrice" + finalPrice);
+        total = total + finalPrice;
+        list.push({name:dishName, price:dishPrice, share:dishShare, finalprice:finalPrice});
+      };
+      Session.set("total",total);
+      return list;
+    },
+    getTotal:function() {
+      return Session.get("total");
+    },
+    getCredits:function() {
+      return Session.get("currentCredits");
+    },
+    getStatus:function() {
+      return Session.get("successPayment");
+    }
+
+  });
+  Template.bill.events({
+    'click .share': function () {
+      var current_users = Session.get("user_id");
+      var current_credits = User.findOne(current_users).credits;
+      var deducted = Session.get("total");
+      var nets_credits = +(current_credits - deducted).toFixed(2);
+      Session.set("currentCredits",nets_credits);
+      Session.set("successPayment",true);
+      // console.log(Session.get("listUser"))
+    }
+
+
+  });
+
+
   Router.route('/payment');
+  Router.route('/bill');
+  Router.route('/home');
+//   Router.configure({
+//   layoutTemplate: 'main'
+// })
 }
 
 // On server startup, create some OrderDetails if the database is empty; create dollections for snakes & ladders position.
@@ -143,9 +183,9 @@ if (Meteor.isServer) {
       OrderDetails.insert({_id: "2", table_id: '1', order_id: "1", product_id: 2, product_name: "dish 2", price: "10.90", owner_id: "1", owner_name: "User 1", share: ["1"], created_at: "2016-09-25"});
     }
     if (User.find().count() === 0) {
-      User.insert({_id: '1', name: "User 1", created_at: "2016-09-20", current_orders:["1","2"]});
-      User.insert({_id: '2', name: "User 2", created_at: "2016-09-20", current_orders:[]});
-      User.insert({_id: '3', name: "User 3", created_at: "2016-09-20", current_orders:[]})
+      User.insert({_id: '1', name: "User 1", created_at: "2016-09-20", current_orders:["1","2"], credits: 100});
+      User.insert({_id: '2', name: "User 2", created_at: "2016-09-20", current_orders:[], credits: 100});
+      User.insert({_id: '3', name: "User 3", created_at: "2016-09-20", current_orders:[], credits: 100})
     }
     if (Orders.find().count() === 0){
       Orders.insert({

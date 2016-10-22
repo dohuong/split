@@ -14,3 +14,4 @@ random
 standard-minifier-css
 standard-minifier-js
 reactive-dict
+iron:router

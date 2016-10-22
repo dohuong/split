@@ -1,17 +1,19 @@
-<head>
-  <title>Orders</title>
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
-</head>
+<template name = "home">
+  <head>
+    <title>Orders</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+  </head>
 
-<body>
-  <div class="outer">
-    <!-- <div class="logo"></div> -->
-    <h1 class="title">Orders</h1>
-    <div class="subtitle">Split</div>
-    {{> split}}
-  </div>
-</body>
+  <body>
+    <div class="outer">
+      <!-- <div class="logo"></div> -->
+      <h1 class="title">Orders</h1>
+      <div class="subtitle">Split</div>
+      {{> split}}
+    </div>
+  </body>
+</template>
 
 <template name="split">
   Current User: {{AppUser}}
@@ -43,9 +45,7 @@
     <div class="message">Select item to split</div>
   {{/if}}
 
-  <div class="details">
-    <button class="share">Done, Go to Payment</button>
-  </div>
+  <a href="{{pathFor route='payment'}}">Done, go to payment</a>
 
  <!--  <div class="outer">
     <div class="details">
@@ -72,10 +72,52 @@
 </template>
 
 
-<template name="payment">
-  <li class="order {{selected}}">
-    <span class="name">{{product_name}}</span>
-    <span class="position">S${{price}}</span>
+<template name = "payment">
+  <head>
+    <title>Payment</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="outer">
+      <!-- <div class="logo"></div> -->
+      <h1 class="title">Payment</h1>
+      <div class="subtitle">Bill</div>
+      {{> bill}}
+    </div>
+  </body>
+</template>
+
+<template name="bill">
+  <ol class="split">
+    {{#each getBill}}
+      {{> billDetails}}
+    {{/each}}
+  </ol>
+  <div class="message">Total: S${{getTotal}}</div>
+  {{#if getStatus}}
+    <div class="message">Payment Successful, Current Credits Amount is S${{getCredits}}</div>
+  {{else}}
+    <a href="{{pathFor route='home'}}">Return to split</a>
+    <div class="message">Current Credits: S${{getCredits}}</div>
+    <div class="details">
+        <button class="share">Confirm Payment</button>
+    </div>
+  {{/if}}
+
+
+</template>
+
+<template name="billDetails">
+  <li class="order">
+    <span class="name">{{name}}</span>
+    <span class="position">S${{price}} / {{share}} = S${{finalprice}}</span>
   </li>
 </template>
+
+
+
+
+
 
