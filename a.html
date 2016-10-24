@@ -1,53 +1,39 @@
 <head>
-  <title>Orders</title>
+  <title>Order</title>
   <meta name="viewport" content="width=device-width, user-scalable=no">
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
   <div class="outer">
-    <!-- <div class="logo"></div> -->
-    <h1 class="title">Orders</h1>
-    <div class="subtitle">Split</div>
+    <div class="logo"></div>
+    <h1 class="title">Order</h1>
+    <div class="subtitle">Select user & item to split</div>
     {{> split}}
   </div>
 </body>
 
 <template name="split">
+  <div class="customer">
+    {{#if getUsers}}
+      {{#each getUsers}}
+        {{> Customers}}
+      {{/each}}
+    {{else}}
+    <div class="message">No other users</div>
+    {{/if}}
+  </div>
   <ol class="split">
     {{#each OrderDetails}}
       {{> OrderDetail}}
     {{/each}}
   </ol>
 
-
-  {{#if selectedName}}
+  {{#if selectedItem}}
     <div class="details">
       <button class="share">Share</button>
     </div>
-    {{#if getUsers}}
-      {{#each getUsers}}
-        {{> Customers}}
-      {{/each}}
-      
-<!--       <div class="details">
-        <div class="name">a
-          {{> Customers}}
-        </div>
-      </div> -->
-    {{else}}
-    <div class="message">No other users</div>
-    {{/if}}
-  {{else}}
-    <div class="message">Select item to split</div>
   {{/if}}
-
- <!--  <div class="outer">
-    <div class="details">
-      <button class="reset">Reset</button>
-    </div>
-  </div> -->
-
 </template>
 
 <template name="OrderDetail">
@@ -58,10 +44,6 @@
 </template>
 
 <template name="Customers">
-  <li class="order">
-<!--     <span class="name">{{user_id}}</span>
- -->    <span class="name">{{name}}</span>
-<!--     <span class="position">{{name}}</span>
- -->  </li>
+  <span class="name {{selected}}">{{name}}</span>
 </template>
 
