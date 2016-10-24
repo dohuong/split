@@ -1,0 +1,49 @@
+<head>
+  <title>Order</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+  <div class="outer">
+    <div class="logo"></div>
+    <h1 class="title">Order</h1>
+    <div class="subtitle">Select user & item to split</div>
+    {{> split}}
+  </div>
+</body>
+
+<template name="split">
+  <div class="customer">
+    {{#if getUsers}}
+      {{#each getUsers}}
+        {{> Customers}}
+      {{/each}}
+    {{else}}
+    <div class="message">No other users</div>
+    {{/if}}
+  </div>
+  <ol class="split">
+    {{#each OrderDetails}}
+      {{> OrderDetail}}
+    {{/each}}
+  </ol>
+
+  {{#if selectedItem}}
+    <div class="details">
+      <button class="share">Share</button>
+    </div>
+  {{/if}}
+</template>
+
+<template name="OrderDetail">
+  <li class="order {{selected}}">
+    <span class="name">{{product_name}}</span>
+    <span class="position">S${{price}}</span>
+  </li>
+</template>
+
+<template name="Customers">
+  <span class="name {{selected}}">{{name}}</span>
+</template>
+
